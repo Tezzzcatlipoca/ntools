@@ -2,7 +2,7 @@
 #         Para traducir source_id a loja1 (usando SMS)
 #
 
-sourcetoloja<-function(source_id) {
+source_loja<-function(source_id) {
 
 library(RODBC)
 sms<-odbcConnect('SMS',uid='nretail',pwd = 'nretail')
@@ -31,7 +31,7 @@ print(loja1)
 #         Traducir de mktr a loja1
 #
 
-mktrtoloja<-function(mktr) {
+mktr_loja<-function(mktr) {
      
      scan<-odbcConnect('scan',uid='scanning',pwd='scanning')
      quero2<-paste("SELECT source_id, cod_amostra_mestra FROM source_master WHERE source_id =",mktr,sep = "")
@@ -47,7 +47,7 @@ mktrtoloja<-function(mktr) {
 #         Mktr to Loja1 (Usando el último archivo de universo)
 #
 
-mktrtoloja2<-function(mktr,Enh="N") {
+mktr_loja2<-function(mktr,Enh="N") {
      ubi.uni<-read.table("C:/Users/franro04/Documents/R Code/DirectorioUnis.txt",sep = "\t",header = TRUE, stringsAsFactors = FALSE)
      year<-2015
      max.num<-max(ubi.uni[ubi.uni$Year==year & ubi.uni$Enh==Enh,"Num"])
@@ -66,7 +66,7 @@ mktrtoloja2<-function(mktr,Enh="N") {
 #         Loja1 to Mktr (Usando el último archivo de universo)
 #
 
-lojatomktr2<-function(loja1,Enh="N") {
+loja_mktr2<-function(loja1,Enh="N") {
      ubi.uni<-read.table("C:/Users/franro04/Documents/R Code/DirectorioUnis.txt",sep = "\t",header = TRUE, stringsAsFactors = FALSE)
      year<-2015
      max.num<-max(ubi.uni[ubi.uni$Year==year & ubi.uni$Enh==Enh,"Num"])
