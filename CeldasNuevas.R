@@ -4,11 +4,14 @@
 
 
 ### ARREGLAR: Agregar posibilidad de checar en univ 2.0!!!!!!!!!!!!!!!
-### ARREGLAR: Hacer directorio de Tots y Universos por periodo para acceso con menos errores
 ### ARREGLAR: Guardar universo en caché
 
+### ---- YA se abren los archivos automáticamente
+### ---- Falta ajustar el cálculo de ACV, Ideal, etc para ENH y las variables de input
+
+
 #Cómo llamar a la función
-universos(2016016,27,'mar','Marzo','noenh',3115,1,0)
+universos(2016016,27,'','','noenh',3115,1,0)
 
 
 #*****************************************************************************************
@@ -23,38 +26,46 @@ grabar_archivo_cezinhos<-0 # Para grabar el archivo, debe ser igual a 1
 #*****************************************************************************************
 
 #Función
-universos<-function (period_id, index_id, month, mes, version, buscadas,tiendas_que_entran_en_celda, grabar_archivo_cezinhos) {
+universos<-function (period_id, index_id, month='', mes='', version='noenh', buscadas,tiendas_que_entran_en_celda, grabar_archivo_cezinhos=0) {
 
 library(RODBC)
 year<-as.integer(substr(period_id,1,4))
 donde<-getwd()
-direccion<-paste("H:/ESTATIST/PROCESSOS E CLIENTES/Migração Universos entre IVPO-OE E MSci/",year-1,"/Ind ",index_id,"/",mes,substr(year,3,6),sep="")
-setwd(direccion)
-if (index_id==51) {
-     tot<-"refri"
-} else {
-     tot<-"tot"
-}
-if (version=='noenh') {
-    nombretot<-paste(tot,year-1,"_",version,"_",month,".csv",sep="")
-} else {
-    nombretot<-paste(tot,year-1,"_",month,".csv",sep="")
-}
+# Abrir directorios
+DirTots<-read.table("J:/CENSO/DATA/CENSO2015/DirectorioTots.txt",header = TRUE,sep="\t")
+direcUnis<-read.table("J:/CENSO/DATA/CENSO2015/DirectorioUnis.txt",header = TRUE,sep="\t")
+
+#direccion<-paste("H:/ESTATIST/PROCESSOS E CLIENTES/Migração Universos entre IVPO-OE E MSci/",year-1,"/Ind ",index_id,"/",mes,substr(year,3,6),sep="")
+#setwd(direccion)
+#if (index_id==51) {
+#     tot<-"refri"
+#} else {
+#     tot<-"tot"
+#}
+#if (version=='noenh') {
+#    nombretot<-paste(tot,year-1,"_",version,"_",month,".csv",sep="")
+#} else {
+#    nombretot<-paste(tot,year-1,"_",month,".csv",sep="")
+#}
 print('Leyendo archivo TOT...')
+nombretot<-as.character(DirTots[DirTots$Ind==index_id,7][1])
 tot<-read.csv(nombretot)
 #print('Archivo leído con éxito.')
-direc2<-paste("J:/CENSO/DATA/CENSO",year-1,sep="")
-setwd(direc2)
+#direc2<-paste("J:/CENSO/DATA/CENSO",year-1,sep="")
+#setwd(direc2)
 if (version=='noenh') {
-    nombreuni<-paste("uni",year-1,"_",version,"_",month,".csv",sep="")
+    ver<-"N"
+   # nombreuni<-paste("uni",year-1,"_",version,"_",month,".csv",sep="")
 } else {
-    nombreuni<-paste("uni",year-1,"_",month,".csv",sep="")
+    ver<-"Y"
+    #nombreuni<-paste("uni",year-1,"_",month,".csv",sep="")
 }
-if (!exists('uni')) {  # Carga el universo sólo si no ha sido cargado
+#if (!exists('uni')) {  # Carga el universo sólo si no ha sido cargado
+nombreuni<-as.character(direcUnis[direcUnis$Enh==ver,7][1])
 print('Leyendo archivo de Universo...')
 uni<-read.csv(nombreuni)
 #print('Archivo leído con éxito.')
-}
+#}
 
 # Leer SMS
 smsh<-odbcConnect('SMSH', uid='nretail', pwd = 'nretail')
