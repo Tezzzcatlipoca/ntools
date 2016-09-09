@@ -5,52 +5,64 @@
 
 # La función de abajo no esta vectorizada
 parecen<-function(uno,dos){        # Busca variaciones de palabra uno en palabra dos
-     uno<-gsub("\\(","",uno)
-     uno<-gsub("\\)","",uno)
-     uno<-gsub("[:punct:]"," ",uno)
+     library(stringdist)
+     library(stringr)
+     uno<-str_replace_all(uno,"[:punct:]","")
+     dos<-str_replace_all(dos,"[:punct:]","")
      uno<-tolower(uno)
-     dos<-gsub("\\(","",dos)
-     dos<-gsub("\\)","",dos)
-     dos<-gsub("[:punct:]"," ",dos)
      dos<-tolower(dos)
      if (length(uno)>1 || length(dos)>1) { stop('Error. Variable a comparar debe tener sólo 1 observación.') }
      
      # Abre diccionario de palabras comunes
      palabras.comunes<-read.csv("C:/Users/franro04/Documents/VBA/PalsSolo.csv",header = FALSE)
+     palabras.comunes$V1<-tolower(palabras.comunes$V1)
      cons.pals.com<-paste(palabras.comunes$V1,collapse = ";")
-     
+
      palabras<-strsplit(uno," ")[[1]]
      marcador<-0
      pals.comunes<-0
-     for (pal in 1:length(palabras)) {
-          slowo<-palabras[pal]
-          if (grepl(dos,pattern = slowo)) {
-               marcador<-nchar(slowo)
-               # Aquí poner la prueba de las palabras comunes
-               if (grepl(cons.pals.com,pattern = slowo)) {pals.comunes<-nchar(slowo)}
-          } else {
+     
+     if (nchar(uno)<8 & nchar(dos)<8) {
+          sensib<-1
+     } else {
+          sensib<-3
+     }
+     
+     if (t(amatch(dos,uno, maxDist = sensib))>0) {     # Si coincide todo el string
+          found<-1
+     } else {
+          found<-0
+     }
+     
+     for (pal in 1:length(palabras)) {     # Dividir el nombre en palabras
+          if (found==1) break # Si ya encontramos coincidencia, evita los ciclos
+          slowo<-palabras[pal]      
+          if (t(amatch(dos,slowo, maxDist = 1))>0) {
+               marcador<-nchar(slowo)+marcador
                rozmiar<-nchar(slowo)
-               for (let in 1:rozmiar) {
-                    patron<-slowo
-                    substr(patron,let,let)<-"~"
-                    patron<-gsub("~","(.?)",patron)
-                    if (grepl(dos,pattern = patron) & rozmiar>2) {
-                         marcador<-marcador+rozmiar
-                         # Aquí poner la segunda prueba de las palabras comunes
-                         if (grepl(cons.pals.com,pattern = patron)) {pals.comunes<-rozmiar}
+               # Si la palabra encontrada era palabra común, identificarla
+               for (comun in 1:length(palabras.comunes$V1)) {
+                    if (t(amatch(palabras.comunes$V1[comun],slowo,maxDist = 1))>0) {
+                         pals.comunes<-nchar(slowo)
                          break
                     }
                }
+               
           }
      }
      
-     espacios<-sum(grepl(uno,pattern = " "))
+     
      tamano.uno<-marcador # espacios: en promedio 
-     espacios<-sum(grepl(dos,pattern = " "))
      tamano.dos<-nchar(dos) #-espacios
      
      ratios<-tamano.uno/tamano.dos
+     
      if (is.na(ratios)) {ratios<-0}
+     if (found==1) {
+          ratios<-1
+          tamano.uno<-1
+          pals.comunes<-0
+     }
      if (ratios>.85 & tamano.uno>pals.comunes) {
           TRUE
      } else {
@@ -58,6 +70,14 @@ parecen<-function(uno,dos){        # Busca variaciones de palabra uno en palabra
      }
 }
 
+t<-function(innnput){
+     if(is.na(innnput)){
+          out<-0
+     } else {
+          out<-innnput
+     }
+     out
+}
 
 # La función de abajo utiliza a la anterior como base y SÍ está vectorizada
 archivo<-read.csv("C:/Users/franro04/Documents/Work Log/z9. Sep 2016/univ050916v2.csv")
