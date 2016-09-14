@@ -15,18 +15,19 @@ universos(2016016,27,'','','noenh',3115,1,0)
 
 
 #*****************************************************************************************
-period_id<-2016016
 index_id<-27
-month<-'mar' #Versión breve (usualmente 3 letras: Jan, Mar...)
-mes<-'Marzo' #Versión larga (Enero / Marzo)
-version<-'noenh'  #Puede ser 'enh' o 'noenh' solamente
+period_id<-2016016
 buscadas<-3115  # Debe ser una celda a la vez -1284
 tiendas_que_entran_en_celda<-1  # Obtener esta información de IV
 grabar_archivo_cezinhos<-0 # Para grabar el archivo, debe ser igual a 1
 #*****************************************************************************************
 
-#Función
-universos<-function (period_id, index_id, month='', mes='', version='noenh', buscadas,tiendas_que_entran_en_celda, grabar_archivo_cezinhos=0) {
+# Función
+desconsolida.univ<-function (index_id, period_id, buscadas, tiendas_que_entran_en_celda=1, grabar_archivo_cezinhos=0) {
+
+if (index_id=='' || period_id=='' || buscadas=='') {
+     stop('Obligatorio introducir índice, periodo y celdas buscadas, en ese orden.')
+}
 
 library(RODBC)
 year<-as.integer(substr(period_id,1,4))
@@ -47,13 +48,11 @@ direcUnis<-read.table("J:/CENSO/DATA/CENSO2015/DirectorioUnis.txt",header = TRUE
 #} else {
 #    nombretot<-paste(tot,year-1,"_",month,".csv",sep="")
 #}
-print('Leyendo archivo TOT...')
-nombretot<-as.character(DirTots[DirTots$Ind==index_id,7][1])
-tot<-read.csv(nombretot)
+
 #print('Archivo leído con éxito.')
 #direc2<-paste("J:/CENSO/DATA/CENSO",year-1,sep="")
 #setwd(direc2)
-if (version=='noenh') {
+if ((index_id>59 && index_id) <65 || index_id==84) {
     ver<-"N"
    # nombreuni<-paste("uni",year-1,"_",version,"_",month,".csv",sep="")
 } else {
@@ -66,6 +65,13 @@ print('Leyendo archivo de Universo...')
 uni<-read.csv(nombreuni)
 #print('Archivo leído con éxito.')
 #}
+if (index_id<60 || index_id>64) {
+     print('Leyendo archivo TOT...')
+     nombretot<-as.character(DirTots[DirTots$Ind==index_id,7][1])
+     tot<-read.csv(nombretot)
+} else {
+     tot<-uni[uni$CONDICAO %in% c(1,2) & !is.na(uni$CONDICAO),]
+}
 
 # Leer SMS
 smsh<-odbcConnect('SMSH', uid='nretail', pwd = 'nretail')
@@ -231,7 +237,27 @@ if (length(padre)==0) {
 
 #Algunos tots tienen los nombres de las variables en mayúscula: Esto causa problemas abajo
 if (sum(names(tot)=='CELL')>0) {
-  tot$cell<-tot$CELL
+     tot$cell<-tot$CELL
+}
+
+if (sum(tolower(names(tot))=='celsorv')>0) {
+     donde<-which(tolower(names(tot))=='celsorv')
+     tot$cell<-tot[,donde]
+}
+
+if (sum(tolower(names(tot))=='cellsorv')>0) {
+     donde<-which(tolower(names(tot))=='cellsorv')
+     tot$cell<-tot[,donde]
+}
+
+if (sum(tolower(names(tot))=='cell_sorv')>0) {
+     donde<-which(tolower(names(tot))=='cell_sorv')
+     tot$cell<-tot[,donde]
+}
+
+if (sum(tolower(names(tot))=='cel_sorv')>0) {
+     donde<-which(tolower(names(tot))=='cel_sorv')
+     tot$cell<-tot[,donde]
 }
 
 if (sum(names(tot)=='MKTR')>0) {
@@ -240,6 +266,27 @@ if (sum(names(tot)=='MKTR')>0) {
 
 if (sum(names(tot)=='FATOR')>0) {
   tot$fator<-tot$FATOR
+}
+
+if (sum(tolower(names(tot))=='fator_fim')>0) {
+     donde<-which(tolower(names(tot))=='fator_fim')
+     tot$fator<-tot[,donde]
+}
+
+if (sum(names(tot)=='acv')>0) {
+     tot$ACV<-tot$acv
+}
+
+if (sum(names(tot)=='loja1')>0) {
+     tot$LOJA1<-tot$loja1
+}
+
+if (sum(names(uni)=='acv')>0) {
+     uni$ACV<-uni$acv
+}
+
+if (sum(names(uni)=='loja1')>0) {
+     uni$LOJA1<-uni$loja1
 }
 
 # Obteniendo datos necesarios
@@ -252,7 +299,7 @@ data3<-merge(data1,data2.5,by='LOJA1',all=FALSE)
 
 #Saber si es una celda SOT o no
 totalregistros<-nrow(data3)
-mktrs<-data3$mktr
+mktrs<-as.integer(as.character(data3$mktr))
 no<-is.na(mktrs)
 newmktr<-mktrs[!no]
 totalsot<-length(newmktr)
@@ -262,25 +309,29 @@ if (totalregistros==totalsot) {
   sot<-0
 }
 if (sot==1) {
-  print('Celda SOT. Revisar si la tienda reportada por IV aparece abajo:')
-  print(data3)
+  print('Celda posiblemente SOT. Revisar si la tienda reportada por IV aparece abajo:')
+  print(data3[data3$cell==buscadas & !is.na(data3$cell),])
 }
 
 #Converting from factors to numbers to be able to count
 data3$ACV<-as.double(as.character(data3$ACV))
-
+if(class(data3$ACV)=='factor'){data3$ACV<-as.integer(as.character(data3$ACV))}
+if(class(data3$cell)=='factor'){data3$cell<-as.integer(as.character(data3$cell))}
+if(class(data3$fator)=='factor'){data3$fator<-as.integer(as.character(data3$fator))}
 
 # Tabla de ACV por celda
 ACVs<-aggregate(ACV~cell,data3,FUN=sum)
 Ns<-aggregate(fator~cell,data3,FUN=sum)
 NewACV<-ACVs[ACVs$cell==buscadas,"ACV"]  # Propuesta de Nuevo ACV
+if(length(NewACV)==0){NewACV<-0}
 sumN<-sum(Ns$fator)
 ourN<-Ns[Ns$cell==buscadas,"fator"]
+if (length(ourN)==0) {ourN<-0.0001}
 proporcion<-ourN/sumN
 SMS_N<-cells[cells$cell_id==padre,"universe_source"] # N del padre
-SMS_Name<-cells[cells$cell_id==buscadas,"cell_name"] #Nombre de célula
+SMS_Name<-as.character(cells[cells$cell_id==buscadas,"cell_name"]) #Nombre de célula
 propuestaN<-round(SMS_N*proporcion,0) # Propuesta de N para célula nueva
-if (propuestaN==0 & SMS_N>0) {propuestaN==1}
+if (propuestaN==0 & SMS_N>0) {propuestaN<-1}
 propPadre<-SMS_N-propuestaN # Propuesta de N para célula padre
 ideal<-cells[cells$cell_id==padre,"ideal_source"]
 fisicas<-cells[cells$cell_id==padre,"sample_source"]
