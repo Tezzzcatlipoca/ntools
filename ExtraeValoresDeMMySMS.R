@@ -44,7 +44,7 @@ verif2.vec<-function(path) {            # Función igual a la anterior, pero Vect
      }
      arch$FatorRev<-out
      # Crear nombre del archivo de salida
-     where.period<-regexpr(".csv",nomme)[1]
+     where.period<-regexpr(".csv",path)[1]
      nom2<-path
      substr(nom2,where.period,where.period)<-"~"
      out.name<-gsub("~","out-Descons.",nom2)
@@ -107,7 +107,7 @@ verif2.vec.cons<-function(path) {
      }
      arch$FatorRev<-out
      # Crear nombre del archivo de salida
-     where.period<-regexpr(".csv",nomme)[1]
+     where.period<-regexpr(".csv",path)[1]
      nom2<-path
      substr(nom2,where.period,where.period)<-"~"
      out.name<-gsub("~","out-Cons.",nom2)
