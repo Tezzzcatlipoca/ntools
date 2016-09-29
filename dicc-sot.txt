@@ -1,0 +1,17 @@
+Tipo	Criterio
+Cadena	[A-Z]{3,}
+No	^BAR |^Bar | BAR | Bar | bar |IBGE
+No	INT
+No	SJRP
+No	POA
+No	PET |CLINICA
+No	^Trad |^TRAD
+No	^Pad |^Padar
+Cadena	SJRP(.*)[A-Z]{3,}|[A-Z]{3,}(.*)SJRP
+Cadena	POA(.*)[A-Z]{3,}|[A-Z]{3,}(.*)POA
+Cadena	AM PM
+Cadena	[^t] BH|^BH
+Cadena	BH(.*)BH
+Cadena	INT(.*)[A-Z]{3,}|[A-Z]{3,}(.*)INT
+Cadena	IBGE(.*)[A-Z]{3,}|[A-Z]{3,}(.*)IBGE
+No	(INDEP|indep|Indep|DEM CAD|Dem Cad|dem cad|Dem cad|CADENA|Cadena|cadena|DEMAIS|Demais|demais|CADEIA|Cadeia|cadeia)

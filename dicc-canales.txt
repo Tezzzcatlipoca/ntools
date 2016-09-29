@@ -1,0 +1,50 @@
+ShopType	Criterio
+Autoservicio 1 CK	" 1([^2-9,0]){0,}CK"
+Autoservicio 2-4 CK	2-4
+Autoservicio 5-9 CK	5-9
+Autoservicio 10-19 CK	10-19
+Autoservicio 20-49 CK	20-49
+Autoservicio 50+CK	"50(.{0,4})CK"
+Bar Gde	"(Bar |BAR |bar )(.{0,4})(GDE|gde|Gde)"
+Bar Peq	"(Bar |BAR |bar )(.{0,4})(PEQ|peq|Peq|PQ|Pq|pq)"
+Bar Peq + Gde	"(Bar |BAR |bar )(.{0,4})(Peq(.{3,4})Gde|PEQ(.{3,4})GDE|peq(.{3,4})gde)"
+Cash & Carry	(ash|ASH)(.+)(arry|ARRY)
+Conveniencia	^Conv |Conveniencia|Conv 
+Farmacia	farma|FARMA|Farma
+Farmacia Gde	"(farma|FARMA|Farma|^Farm )(.{0,4})(GDE|gde|Gde|GD|Gd|gd)"
+Farmacia Med	"(farma|FARMA|Farma|^Farm )(.{0,4})(MED|med|Med|MD|Md|md)"
+Farmacia Peq	"(farma|FARMA|Farma|^Farm )(.{0,4})(PEQ|peq|Peq|PQ|Pq|pq)"
+Farmacia Med + Gde	"(Farma|FARMA|farma|^Farm )(.{0,4})(Med(.{3,4})Gde|MED(.{3,4})GDE|med(.{3,4})gde|(md|MD|Md)(.{3,4})(gd|GD|Gd))"
+Farmacia Peq + Med + Gde	"(Farma|FARMA|farma|^Farm )(.{0,4})(Peq(.{3,4})Med(.{3,4})Gde|PEQ(.{3,4})MED(.{3,4})GDE|peq(.{3,4})med(.{3,4})gde)"
+Padaría Gde	"(^PG |^PG.)|((^Pad |^PAD |^PD |^Pd |^Pd.|^PD.|^PAD.|PADAR|padar|Padar)(.{0,4})(GDE|gde|Gde))"
+Padaría Med	"(^PM |^PM.)|((^Pad |^PAD |^PD |^Pd |^Pd.|^PD.|^PAD.|PADAR|padar|Padar)(.{0,4})(MED|med|Med))"
+Padaría Peq	"(^PP |^PP.)|((^Pad |^PAD |^PD |^Pd |^Pd.|^PD.|^PAD.|PADAR|padar|Padar)(.{0,4})(PEQ|peq|Peq))"
+Padaría Med + Gde	"(^Pad |^PAD |^PD |^Pd |^Pd.|^PD.|^PAD.|PADAR|padar|Padar)(.{0,4})(Med(.{3,4})Gde|MED(.{3,4})GDE|med(.{3,4})gde)"
+Padaría Peq + Med	"(^Pad |^PAD |^PD |^Pd |^Pd.|^PD.|^PAD.|PADAR|padar|Padar)(.{0,4})(Peq(.{3,4})Med|PEQ(.{3,4})MED|peq(.{3,4})med)"
+Padaría Peq + Med + Gde	"(^Pad |^PAD |^PD |^Pd |^Pd.|^PD.|^PAD.|PADAR|padar|Padar)(.{0,4})(Peq(.{3,4})Med(.{3,4})Gde|PEQ(.{3,4})MED(.{3,4})GDE|peq(.{3,4})med(.{3,4})gde)"
+Perfumeria	^Perf |^PERF |^perf | perf | PERF | Perf |Perfum|PERFUM|perfum
+Perfumeria Gde	"(^Perf |^PERF |^perf | perf | PERF | Perf |Perfum|PERFUM|perfum)(.{0,4})(GDE|gde|Gde|GD|Gd|gd)"
+Perfumeria Peq	"(^Perf |^PERF |^perf | perf | PERF | Perf |Perfum|PERFUM|perfum)(.{0,4})(PEQ|peq|Peq|PQ|Pq|pq)"
+Perfumeria Peq + Gde	"(^Perf |^PERF |^perf | perf | PERF | Perf |Perfum|PERFUM|perfum)(.{0,4})(Peq(.{3,4})Gde|PEQ(.{3,4})GDE|peq(.{3,4})gde)"
+Pet Shop	^Pet |^PET |^pet |pet shop|PET SHOP|Pet Shop|CLINICA|clinica
+Pet Shop Gde	"(^Pet |^PET |^pet |pet shop|PET SHOP|Pet Shop)(.*)(GDE|gde|Gde)"
+Pet Shop Peq	"(^Pet |^PET |^pet |pet shop|PET SHOP|Pet Shop)(.*)(PEQ|peq|Peq)"
+Tradicional	^Trad |^TRAD |^TRAD.|^Trad.|^TD|^Td|Tradicional|TRADICIONAL|tradicional
+Tradicional Gde SC	"(^Trad |^TRAD |^TRAD.|^Trad.|^TD|^Td|Tradicional|TRADICIONAL|tradicional)(.{0,4})(Gde|GDE|gde|GD|gd|Gd)(.*)SC"
+Tradicional Gde SC	"(^TG |^TG.|^Tg |^Tg.)(.{0,4})(Gde|GDE|gde|GD|gd|Gd)(.*)SC"
+Tradicional Gde CC	"(^Trad |^TRAD |^TRAD.|^Trad.|^TD|^Td|Tradicional|TRADICIONAL|tradicional)(.{0,4})(Gde|GDE|gde|GD|gd|Gd)(.*)CC"
+Tradicional Gde CC	"(^TG |^TG.|^Tg |^Tg.)(.{0,4})(Gde|GDE|gde|GD|gd|Gd)(.*)CC"
+Tradicional Med SC	"(^Trad |^TRAD |^TRAD.|^Trad.|^TD|^Td|Tradicional|TRADICIONAL|tradicional)(.{0,4})(Med|MED|med|MD|md|Md)(.*)SC"
+Tradicional Med SC	"(^TM |^TM.|^Tm |^Tm.)(.{0,4})(Med|MED|med|MD|md|Md)(.*)SC"
+Tradicional Med CC	"(^Trad |^TRAD |^TRAD.|^Trad.|^TD|^Td|Tradicional|TRADICIONAL|tradicional)(.{0,4})(Med|MED|med|MD|md|Md)(.*)CC"
+Tradicional Med CC	"(^TM |^TM.|^Tm |^Tm.)(.{0,4})(Med|MED|med|MD|md|Md)(.*)CC"
+Tradicional Peq SC	"(^Trad |^TRAD |^TRAD.|^Trad.|^TD|^Td|Tradicional|TRADICIONAL|tradicional)(.{0,4})(Peq|PEQ|peq|PQ|pq|Pq)(.*)SC"
+Tradicional Peq SC	"(^TG |^TG.|^Tg |^Tg.)(.{0,4})(Peq|PEQ|peq|PQ|pq|Pq)(.*)SC"
+Tradicional Peq CC	"(^Trad |^TRAD |^TRAD.|^Trad.|^TD|^Td|Tradicional|TRADICIONAL|tradicional)(.{0,4})(Peq|PEQ|peq|PQ|pq|Pq)(.*)CC"
+Tradicional Peq CC	"(^TG |^TG.|^Tg |^Tg.)(.{0,4})(Peq|PEQ|peq|PQ|pq|Pq)(.*)CC"
+Tradicional Med + Gde SC	"(^Trad |^TRAD |^TRAD.|^Trad.|^TD|^Td|Tradicional|TRADICIONAL|tradicional)(.{0,4})(Med(.{3,4})Gde|MED(.{3,4})GDE|med(.{3,4})gde)(.*)SC"
+Tradicional Med + Gde CC	"(^Trad |^TRAD |^TRAD.|^Trad.|^TD|^Td|Tradicional|TRADICIONAL|tradicional)(.{0,4})(Med(.{3,4})Gde|MED(.{3,4})GDE|med(.{3,4})gde)(.*)CC"
+Tradicional Peq + Med SC	"(^Trad |^TRAD |^TRAD.|^Trad.|^TD|^Td|Tradicional|TRADICIONAL|tradicional)(.{0,4})(Peq(.{3,4})Med|PEQ(.{3,4})MED|peq(.{3,4})med)(.*)SC"
+Tradicional Peq + Med CC	"(^Trad |^TRAD |^TRAD.|^Trad.|^TD|^Td|Tradicional|TRADICIONAL|tradicional)(.{0,4})(Peq(.{3,4})Med|PEQ(.{3,4})MED|peq(.{3,4})med)(.*)CC"
+Tradicional Peq + Med + Gde SC	"(^Trad |^TRAD |^TRAD.|^Trad.|^TD|^Td|Tradicional|TRADICIONAL|tradicional)(.{0,4})(Peq(.{3,4})Med(.{3,4})Gde|PEQ(.{3,4})MED(.{3,4})GDE|peq(.{3,4})med(.{3,4})gde)(.*)SC"
+Tradicional Peq + Med + Gde CC	"(^Trad |^TRAD |^TRAD.|^Trad.|^TD|^Td|Tradicional|TRADICIONAL|tradicional)(.{0,4})(Peq(.{3,4})Med(.{3,4})Gde|PEQ(.{3,4})MED(.{3,4})GDE|peq(.{3,4})med(.{3,4})gde)(.*)CC"
