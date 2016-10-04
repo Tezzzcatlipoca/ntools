@@ -77,7 +77,7 @@ if (index_id<60 || index_id>64) {
 smsh<-odbcConnect('SMSH', uid='nretail', pwd = 'nretail')
 quer<-paste("SELECT ","cell_id, index_id, period_id, cell_name, universe_source, ideal_source, status_id, sample_source, c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15, c16"," FROM index_period_cell WHERE period_id = ",period_id," AND index_id = ", index_id, sep="")
 cells<-sqlQuery(smsh,query=quer)
-odbcClose(smsh)
+close(smsh)
 
 if (dim(cells)[1]==0) {
     stop('El índice no contiene datos para este periodo.')
@@ -292,6 +292,7 @@ if (sum(names(uni)=='loja1')>0) {
 # Obteniendo datos necesarios
 activas<-c(1,2)
 data1<-tot[tot$CONDICAO %in% activas & tot$cell %in% parientes,c('cell','mktr','fator','LOJA1')]
+if(dim(data1)[1]==0) {stop("No existe ninguna tienda en celdas relacionadas del Tot.")}
 data2<-uni[,c('ACV','LOJA1')]
 permisibles<-unique(data1$LOJA1)
 data2.5<-data2[data2$LOJA1 %in% permisibles,]
