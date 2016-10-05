@@ -32,6 +32,7 @@ if (index_id=='' || period_id=='' || buscadas=='') {
 library(RODBC)
 year<-as.integer(substr(period_id,1,4))
 donde<-getwd()
+
 # Abrir directorios
 DirTots<-read.table("J:/CENSO/DATA/CENSO2015/DirectorioTots.txt",header = TRUE,sep="\t")
 direcUnis<-read.table("J:/CENSO/DATA/CENSO2015/DirectorioUnis.txt",header = TRUE,sep="\t")
@@ -74,10 +75,10 @@ if (index_id<60 || index_id>64) {
 }
 
 # Leer SMS
-smsh<-odbcConnect('SMSH', uid='nretail', pwd = 'nretail')
+smsh<-suppressWarnings(odbcConnect('SMSH', uid='nretail', pwd = 'nretail'))
 quer<-paste("SELECT ","cell_id, index_id, period_id, cell_name, universe_source, ideal_source, status_id, sample_source, c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15, c16"," FROM index_period_cell WHERE period_id = ",period_id," AND index_id = ", index_id, sep="")
 cells<-sqlQuery(smsh,query=quer)
-close(smsh)
+odbcClose(smsh)
 
 if (dim(cells)[1]==0) {
     stop('El índice no contiene datos para este periodo.')
