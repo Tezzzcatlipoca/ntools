@@ -79,8 +79,21 @@ t<-function(innnput){
      out
 }
 
+# Función vectorizada (sin abrir archivo)
+parecen.vec<-function(one,two){
+     veces<-length(one)
+     veces2<-length(two)
+     if(veces!=veces2){stop('Ambas variables de entrada deben tener misma longitud.')}
+     outvec<-rep(NA,veces)
+     for(i in 1:veces) {
+          outvec[i]<-parecen(one[i],two[i])
+     }
+     outvec
+}
+
+
 # La función de abajo utiliza a la anterior como base y SÍ está vectorizada
-archivo<-read.csv("C:/Users/franro04/Documents/Work Log/z9. Sep 2016/univ050916v2.csv")
+archivo<-read.csv("C:/Users/franro04/Documents/Work Log/z91. Oct 2016/TiendasAVerif.csv")
 claves<-read.csv("C:/Users/franro04/Documents/Work Log/z9. Sep 2016/CADEIAs.csv")
 
 iteraciones<-dim(archivo)[1]
@@ -108,4 +121,5 @@ which.cadeia[which.cadeia==0]<-NA
 cadeias<-claves[which.cadeia,c('cadeia','nome')]
 archivo2<-cbind(archivo,cadeias,which1,which2)
 
-write.csv(archivo2,file = "C:/Users/franro04/Documents/Work Log/z9. Sep 2016/out2.csv")
+write.csv(archivo2,file = "C:/Users/franro04/Documents/Work Log/z91. Oct 2016/out1.csv")
+
