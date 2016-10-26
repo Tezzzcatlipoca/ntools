@@ -1,7 +1,7 @@
 
 #*************************************************************************************#
 #                                                                                     #
-# Programa para ajustar datos según los límites definidos para mercados específicos   #
+# Programa para ajustar datos según los límites definidos para estratos específicos   #
 #                                                                                     #
 #    El programa necesita 2 archivos CSV:                                             #
 #                                                                                     #
@@ -70,21 +70,18 @@ for (estrato in 1:tam) {
           datos$ajustado[datos$estrato==estrato.ahora & !is.na(datos$estrato)]<-1
           datos[datos$estrato==estrato.ahora & !is.na(datos$estrato),'coment']<-'No es factible reducir mas'
      } else if (min(valores)<1){
-          # Hay por lo menos un valor menor a 1. Corregir.
-          # Aumentar todos a 1 y reducir misma cantidad en otros factores.
-          # Para cada valor arriba de 1, ubicar sus grados de libertad para ser
-          # recortados, éstos se convierten en ratios y así se multiplica la 
-          # carga total a ser compensada. A cada número se le recortará sólo lo
+          # Aumentar menores a 1 y reducir misma cantidad en otros factores.
+          # A cada número se le recortará sólo lo
           # que sea posible cortarle.
           
           # Direcciones en el dataset original que apuntan a los datos a ser modificados
           donde.observados<-which(datos$estrato==estrato.ahora & !is.na(datos$estrato))
           # Distancias entre los datos a ser modificados y la unidad mínima posible (1)
-          diferencias<-datos$ajustado[donde.observados]-1
+          diferencias<-1-datos$ajustado[donde.observados]
           # Datos menores a la unidad mínima (1)
-          a_restar<-diferencias[diferencias<0]
+          a_restar<-diferencias[diferencias>0]
           # Ubicación local de los datos menores a la unidad mínima (1)
-          donde_restar<-which(diferencias<0)
+          donde_restar<-which(diferencias>0)
           # Ubicación original de los datos mayores a la unidad mínima (1)
           local_aumentar<-donde.observados[donde_restar] # Dónde están
           # Se ajustan los datos que deben ser igualados a la unidad mínima (1)
@@ -95,9 +92,9 @@ for (estrato in 1:tam) {
           # Cantidad total a ser redistribuida entre los valores que pueden ser disminuidos
           total_resta<-sum(a_restar)
           # Datos mayores a la unidad mínima (pueden ser disminuidos)
-          a_sumar<-diferencias[diferencias>=0]
+          a_sumar<-diferencias[diferencias<=0]
           # Ubicación local de los datos mayores a la unidad mínima
-          donde_sumar<-which(diferencias>=0)
+          donde_sumar<-which(diferencias<=0)
           # Sacar ratio (para saber cuánta capacidad de reducción tiene cada valor)
           total_suma<-sum(a_sumar) # Suma
           ratios_sumar<-a_sumar/total_suma # Ratio/Proporción
@@ -105,7 +102,8 @@ for (estrato in 1:tam) {
           # disminuido sin caer debajo el valor mínimo (1)
           restas<-ratios_sumar*total_resta
           # Se aplican los cambios a los valores originales
-          resultados<-a_sumar+restas # Se suman porque los segundos son negativos
+          resultados<-(-a_sumar+1)-restas # Se restan porque los segundos son positivos
+          
           # Ubicación original de los datos mayores a la unidad mínima (1)
           local_restar<-donde.observados[donde_sumar]
           # Se aplican los cambios
@@ -117,7 +115,11 @@ for (estrato in 1:tam) {
      
 }
 
+try({
+     datos[is.na(datos$coment),'coment']<-''
+})
+
 nombreout<-sub(".csv","-out.csv",BD)
 write.csv(datos,nombreout)
 
-} # End of function
+} # Fin de función
