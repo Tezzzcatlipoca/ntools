@@ -4,10 +4,17 @@
 #
 
 #mercados<-c("CDD.MOOCA","CDD.DIAD","DIASUL.IN")
-tag_name<-"DIA.AR4"
-mbd_id<-NA
+tag_name<-NA
+mbd_id<-1554
 indice<-51
 
+# Cómo llamar a la función
+criterio(51,1554) # Por mbd_id
+criterio(51,tag_name = 'CDD.MOOCA') # Por tag_name
+
+# Función
+criterio<-function(indice=NA,mbd_id=NA,tag_name=NA){
+     
 library(RODBC)
 smsh<-odbcConnect("smsh",uid="nretail",pwd="nretail")
 if(is.na(mbd_id) & is.na(tag_name)) {stop('Necesario proveer mbd_id o tag_name')}
@@ -87,5 +94,22 @@ for (w in 1:cuenta) {
 }
 
 linea.completa<-paste0(criterios$string,collapse = " ")
+linea.completa<-gsub("[ ]{2,}"," ",linea.completa) # Eliminar espacios extra
+linea.completa
+}
 
+# Función vectorizada (basada en la función anterior)
 
+varios_criterios<-function(vector_m){
+if(dim(vector_m)[1]<1){stop('El vector no tiene observaciones.')}
+if(dim(vector_m)[2]<3){stop('El vector no tiene variables necesarias (índice, mbd_id, tag_name). Variables ausentes pueden llenarse con NAs.')}
+if(class(vector_m[1])!='integer'){stop('El índice debe ser primero y debe ser tipo integer.')}
+if(class(vector_m[2])!='integer'){stop('El mbd_id debe ser segundo y debe ser tipo integer.')}
+if(class(vector_m[3])!='character'){stop('El tag_name debe ser tercero y debe ser tipo character.')}
+               
+out_m<-c()
+     for (i in 1:(dim(vector_m)[1])) {
+          out_m<-c(out_m,criterio(vector_m[i,1],vector_m[i,2],vector_m[i,3]))
+     }
+out_m
+}
