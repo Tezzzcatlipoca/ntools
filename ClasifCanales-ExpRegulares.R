@@ -3,6 +3,8 @@
 # Código para Clasificar Celdas por sus Canales utilizando Expresiones Regulares
 # guardadas en un archivo "diccionario"
 #
+# El archivo con celdas a clasificar debe tener la columna llamada "cell_name"
+#
 
 
 clasifica<-function(archivo){ 
