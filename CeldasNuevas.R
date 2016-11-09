@@ -2,17 +2,14 @@
 ### IMPORTANTE: Antes de correr este programa, es necesario correr el programa de 'ExportaDeSASaCSV-R.SAS'
 ### **********************************************************************************************************
 
-
-### ARREGLAR: Agregar posibilidad de checar en univ 2.0!!!!!!!!!!!!!!!
-### ARREGLAR: Guardar universo en caché
-
 ### ---- YA se abren los archivos automáticamente
 ### ---- Falta ajustar el cálculo de ACV, Ideal, etc para ENH y las variables de input
 
 
 #Cómo llamar a la función
-universos(2016016,27,'','','noenh',3115,1,0)
-
+desconsolida.univ(27,2016016,27,3115) # Cuando entra 1 sola tienda
+desconsolida.univ(27,2016016,27,3115, 3) # Cuando entran más de 1 tiendas
+desconsolida.univ(27,2016016,27,3115,grabar_archivo_cezinhos = 1) # Para que la función exporte archivo de consolidaciones
 
 #*****************************************************************************************
 index_id<-27
@@ -63,15 +60,36 @@ if ((index_id>59 && index_id) <65 || index_id==84) {
 #if (!exists('uni')) {  # Carga el universo sólo si no ha sido cargado
 nombreuni<-as.character(direcUnis[direcUnis$Enh==ver,7][1])
 print('Leyendo archivo de Universo...')
-uni<-read.csv(nombreuni)
+#uni<-loadCache(nombreuni)
+if(!exists('zzz_n_uni')) {
+     uni<<-read.csv(nombreuni)
+     zzz_n_uni<<-nombreuni
+}  else {
+     if(zzz_n_uni!=nombreuni){
+          uni<<-read.csv(nombreuni)
+          zzz_n_uni<<-nombreuni
+          #saveCache(uni,key=nombreuni)
+     }
+}
 #print('Archivo leído con éxito.')
 #}
 if (index_id<60 || index_id>64) {
      print('Leyendo archivo TOT...')
-     nombretot<-as.character(DirTots[DirTots$Ind==index_id,7][1])
-     tot<-read.csv(nombretot)
+     nombretot_local<-as.character(DirTots[DirTots$Ind==index_id,7][1])
+     #tot<-loadCache(nombretot)
+     if(exists('nombretot')){
+          if(nombretot_local!=nombretot){
+               tot<<-read.csv(nombretot)     # Si existe el tot en cache pero es otro indice
+               nombretot<<-nombretot_local
+          }
+     } else {
+          tot<<-read.csv(nombretot)          # Si no existe el tot en chace
+          nombretot<<-nombretot_local
+     }
+     
 } else {
-     tot<-uni[uni$CONDICAO %in% c(1,2) & !is.na(uni$CONDICAO),]
+     tot<<-uni[uni$CONDICAO %in% c(1,2) & !is.na(uni$CONDICAO),]
+     nombretot<<-'univ'
 }
 
 # Leer SMS
