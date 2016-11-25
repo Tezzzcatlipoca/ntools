@@ -17,6 +17,8 @@ verif2<-function(ind,celda){
           pivot$FATOR<-pivot$fator_fim
      }
      if (sum(grepl(names(pivot),pattern = "Cell"))>0 & sum(grepl(names(pivot),pattern = "CELL"))==0) { pivot$CELL<-pivot$Cell }
+     if (sum(grepl(names(pivot),pattern = "CELL_ID"))>0) { pivot$CELL<-pivot$CELL_ID }
+     if (sum(grepl(names(pivot),pattern = "cell_id"))>0) { pivot$CELL<-pivot$cell_id }
      if (sum(grepl(names(pivot),pattern = "fator"))>0) { pivot$FATOR<-pivot$fator }
      if (sum(grepl(names(pivot),pattern = "MKTR"))>0) { pivot$mktr<-pivot$MKTR }
      pivot2<-pivot[pivot$CONDICAO %in% c(1,2) & !is.na(pivot$CONDICAO),]
@@ -134,7 +136,7 @@ verif<-function(ind,celda){
      if (sum(grepl(names(pivot),pattern = "Cell"))>0 & sum(grepl(names(pivot),pattern = "CELL"))==0) { pivot$CELL<-pivot$Cell }
      if (sum(grepl(names(pivot),pattern = "fator"))>0) { pivot$FATOR<-pivot$fator }
      if (sum(grepl(names(pivot),pattern = "MKTR"))>0) { pivot$mktr<-pivot$MKTR }
-     pivot[pivot$CELL==celda & !is.na(pivot$CELL),c('LOJA1','CELL','mktr')]
+     pivot[pivot$CELL==celda & !is.na(pivot$CELL),c('LOJA1','CELL','mktr','CONDICAO')]
 }
 
 # Extrae las tiendas y universos para celdas específicas en SMS
