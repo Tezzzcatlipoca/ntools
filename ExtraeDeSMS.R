@@ -131,6 +131,24 @@ ips_raw<-function(index_id,variables,args=NA){
      out
 }
 
+scan<-function(variables,args=NA){
+     library(RODBC)
+     smsh<-odbcConnect('scan','scanning','scanning')
+     index_id<-1
+     ind.periodos<-sqlQuery(smsh,"SELECT DISTINCT period_id FROM index_period_source WHERE index_id=1")
+     periodos<-as.integer(as.character(unique(ind.periodos$period_id)))
+     per<-max(periodos)
+     varos<-paste0(variables,collapse = ", ")
+     if (!is.na(args)) {
+          linea<-paste0("SELECT ",varos," FROM index_period_source WHERE status_id IN (6,7,8,9) AND index_id = ",index_id," AND period_id = ",per," AND ",args)
+     } else {
+          linea<-paste0("SELECT ",varos," FROM index_period_source wHERE status_id IN (6,7,8,9) AND index_id = ",index_id," AND period_id = ",per)
+     }
+     out<-sqlQuery(smsh,linea)
+     close(smsh)
+     out
+}
+
 sm<-function(variables,args=NA){
      library(RODBC)
      sms<-odbcConnect('sms','nretail','nretail')
