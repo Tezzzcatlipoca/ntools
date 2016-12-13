@@ -56,7 +56,7 @@ if (origen_MM) {
      obs_retail<-sqlQuery(sms,linea3)
      # SMS-Scan por mktr (de MM)
      linea<-paste0("SELECT source_id AS scan_source_id, source_id AS mktr, cod_amostra_mestra FROM source_master WHERE source_id IN (",mktrs,")")
-     scan_id<-paste0(linea$scan_source_id,collapse = ",")
+     #scan_id<-paste0(linea$scan_source_id,collapse = ",")
      scan<-odbcConnect('scan','scanning','scanning')     # ODBC
      obs_scan<-sqlQuery(scan,linea)
      # Juntar todas las tablas en una sola
